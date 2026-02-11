@@ -18,14 +18,12 @@ jobs:
         include:
           - platform: macOS
             os: macos-latest
-            shell: bash
             dist_arg: --mac
             artifact_name: rch-desktop-macos-dmg
             artifact_glob: electron/dist-release/*.dmg
             csc_identity_auto_discovery: "false"
           - platform: Windows
             os: windows-latest
-            shell: powershell
             dist_arg: --win
             artifact_name: rch-desktop-windows-exe
             artifact_glob: electron/dist-release/*.exe
@@ -46,22 +44,18 @@ jobs:
           node-version: "20"
 
       - name: Install backend build dependencies
-        shell: ${{ matrix.shell }}
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e .
           python -m pip install pyinstaller
 
       - name: Install UI dependencies
-        shell: ${{ matrix.shell }}
         run: npm ci --prefix ui
 
       - name: Install Electron dependencies
-        shell: ${{ matrix.shell }}
         run: npm ci --prefix electron
 
       - name: Build platform artifacts
-        shell: ${{ matrix.shell }}
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: ${{ matrix.csc_identity_auto_discovery }}
         run: |
